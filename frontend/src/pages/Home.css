@@ -1,0 +1,32 @@
+.home-page {
+  display: grid;
+  place-items: center;
+}
+
+.home-card {
+  width: min(100%, 36rem);
+  overflow-wrap: anywhere;
+}
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.home-actions :is(a, button) {
+  padding: 10px 24px;
+  border: 1px solid var(--button);
+  border-radius: 24px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.home-actions .home-primary {
+  background: var(--button);
+  color: #fff3e4;
+}

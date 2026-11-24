@@ -1,0 +1,212 @@
+#root:has(.register-page) {
+  width: 100%;
+  border: 0;
+}
+
+.register-page {
+  --page-bg: #C6B39D;
+  --card-bg: #DBCCB9;
+  --input-bg: #E8DDCF;
+  --text: #382E27;
+  --muted-text: #5F5145;
+  --field-border: #81705E;
+  --button: #725039;
+  --error: #942F35;
+  min-height: 100svh;
+  padding: 8px clamp(12px, 2.4vw, 36px) 24px;
+  background: var(--page-bg);
+  color: var(--text);
+  color-scheme: light;
+  font: 1rem/1.45 'Segoe UI', Arial, sans-serif;
+  letter-spacing: normal;
+}
+
+.register-page, .register-page * {
+  box-sizing: border-box;
+}
+
+.register-card {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(24px, 3vw, 44px) clamp(16px, 2vw, 30px) 24px;
+  border: 1px solid #AB957D;
+  border-radius: 26px;
+  background: var(--card-bg);
+}
+
+.register-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.register-header h1 {
+  margin: 8px 0 4px;
+  color: var(--text);
+  font: 650 clamp(26px, 2.5vw, 34px)/1.25 'Segoe UI', Arial, sans-serif;
+  letter-spacing: normal;
+}
+
+.register-header p, .register-field label {
+  color: var(--muted-text);
+}
+
+.register-fields {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.register-names {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.register-names > :first-child {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.register-field {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+  text-align: right;
+}
+
+.register-field label {
+  font-weight: 600;
+}
+
+.register-field input, .register-field select, .register-submit {
+  width: 100%;
+  min-width: 0;
+  min-height: clamp(48px, 5vw, 66px);
+  padding: 10px clamp(16px, 2vw, 28px);
+  border: 1px solid var(--field-border);
+  border-radius: 40px;
+  background: var(--input-bg);
+  color: var(--text);
+  font: inherit;
+}
+
+.register-field input {
+  text-align: right;
+}
+
+.register-field input::placeholder, .register-field select:invalid {
+  color: var(--muted-text);
+}
+
+.register-page :is(input, select, button, a):focus-visible {
+  outline: 2px solid var(--button);
+  outline-offset: 3px;
+}
+
+.register-field input:user-invalid, .register-field select:user-invalid,
+.register-field input[aria-invalid="true"] {
+  border-color: var(--error);
+}
+
+.password-error {
+  margin: 0;
+  color: var(--error);
+}
+
+.register-password, .register-date {
+  position: relative;
+}
+
+.register-password input {
+  padding-left: 76px;
+}
+
+.register-password button, .register-footer button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.register-password button {
+  position: absolute;
+  inset: 2px auto 2px 12px;
+  padding: 0 10px;
+  color: var(--button);
+}
+
+.register-date input {
+  text-align: left;
+}
+
+.register-date span {
+  position: absolute;
+  top: 50%;
+  left: clamp(16px, 2vw, 28px);
+  transform: translateY(-50%);
+  background: var(--input-bg);
+  color: var(--muted-text);
+  pointer-events: none;
+}
+
+.register-date:focus-within span {
+  display: none;
+}
+
+.register-field small {
+  color: var(--muted-text);
+}
+
+.register-submit {
+  background: var(--button);
+  color: #FFF3E4;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.register-submit:hover {
+  background: #60412E;
+}
+
+.register-submit:disabled {
+  cursor: wait;
+}
+
+.register-status:not(:empty) {
+  margin: 16px 0 0;
+  text-align: center;
+}
+
+.register-footer {
+  padding: 20px 0 24px;
+  border-bottom: 1px solid #AB957D;
+  text-align: center;
+}
+
+.register-footer :is(button, a) {
+  padding: 0;
+  color: inherit;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .register-card { border-radius: 20px; }
+  .register-names { grid-template-columns: 1fr; gap: 20px; }
+  .register-names > :first-child { grid-column: auto; }
+}
+.signup-page.register-page {
+  display: grid;
+  place-items: center;
+  padding: clamp(20px, 5vw, 72px) clamp(12px, 4vw, 56px);
+}
+
+.signup-page > .register-card {
+  width: min(100%, 920px);
+  min-width: 0;
+  padding: clamp(22px, 4vw, 52px) clamp(16px, 5vw, 64px);
+  box-shadow: 0 12px 36px rgb(69 46 27 / 14%);
+}
