@@ -1,62 +1,77 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { HashRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import Login from './pages/Login.jsx'
 import Home from './pages/Home.jsx'
 import Profile from './pages/Profile.jsx'
 import Register from './pages/Register.jsx'
+import api from './services/api.js'
 
-async function demoPasswordCheck(password, salt) {
-  const key = await crypto.subtle.importKey(
-    'raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits'],
-  )
-  const bits = await crypto.subtle.deriveBits(
-    { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 100000 }, key, 256,
-  )
-  return Array.from(new Uint8Array(bits)).join(',')
-}
-
-function DemoRoutes() {
+function AppRoutes() {
   const navigate = useNavigate()
-  const [account, setAccount] = useState(null)
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(undefined)
+  const [logoutError, setLogoutError] = useState('')
+  const registrationPhoto = useRef(null)
 
-  async function register({ password, ...profile }) {
-    const salt = crypto.getRandomValues(new Uint8Array(16))
-    const check = await demoPasswordCheck(password, salt)
-    setAccount({ profile, salt, check })
-    setUser(null)
+  useEffect(() => {
+    const controller = new AbortController()
+
+    api.get('/me', { signal: controller.signal })
+      .then(({ data }) => {
+        if (!controller.signal.aborted) setUser(data.student ?? null)
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setUser(null)
+      })
+
+    return () => controller.abort()
+  }, [])
+
+  async function register({ photo, ...profile }) {
+    await api.post('/register', profile)
+    registrationPhoto.current = photo ? { email: profile.email.trim().toLowerCase(), file: photo } : null
     navigate('/login', { replace: true })
   }
 
-  async function login({ email, password }) {
-    if (!account || email.toLowerCase() !== account.profile.email.trim().toLowerCase()) return false
-    if (await demoPasswordCheck(password, account.salt) !== account.check) return false
-    setUser(account.profile)
+  async function login(credentials) {
+    const { data: { student } } = await api.post('/login', credentials)
+    const photo = registrationPhoto.current
+    setUser(photo?.email === student.email ? { ...student, photo: photo.file } : student)
+    setLogoutError('')
     navigate('/profile', { replace: true })
-    return true
   }
 
-  function logout() {
-    setUser(null)
-    navigate('/login', { replace: true })
+  async function logout() {
+    try {
+      await api.post('/logout')
+      setUser(null)
+      setLogoutError('')
+      navigate('/login', { replace: true })
+    } catch {
+      setLogoutError('Log out is unavailable. Please try again.')
+    }
   }
+
+  if (user === undefined) return <p role="status">Checking your session…</p>
 
   return (
-    <Routes>
-      <Route path="/" element={<Home user={user} onLogout={logout} />} />
-      <Route path="/register" element={<Register onRegister={register} loginUrl="#/login" />} />
-      <Route path="/login" element={<Login onLogin={login} />} />
-      <Route path="/profile" element={user
-        ? <Profile user={user} onLogout={logout} />
-        : <Navigate to="/login" replace />} />
-    </Routes>
+    <>
+      {logoutError && <p role="alert">{logoutError}</p>}
+      <Routes>
+        <Route path="/" element={<Home user={user} onLogout={logout} />} />
+        <Route path="/register" element={<Register onRegister={register} loginUrl="#/login" />} />
+        <Route path="/login" element={<Login onLogin={login} />} />
+        <Route path="/profile" element={user
+          ? <Profile user={user} onLogout={logout} />
+          : <Navigate to="/login" replace />} />
+      </Routes>
+    </>
   )
 }
 
 export default function App() {
   return (
     <HashRouter>
-      <DemoRoutes />
+      <AppRoutes />
     </HashRouter>
   )
 }

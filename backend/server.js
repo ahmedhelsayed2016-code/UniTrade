@@ -18,7 +18,7 @@ app.use(cors({
 
 app.use("/api/auth", authRoutes);
 
-const frontendFolder = fileURLToPath(new URL("../New folder/", import.meta.url));
+const frontendFolder = fileURLToPath(new URL("../frontend/dist/", import.meta.url));
 app.use(express.static(frontendFolder));
 
 if (!process.env.JWT_SECRET) {

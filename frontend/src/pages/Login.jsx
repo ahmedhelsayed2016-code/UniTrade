@@ -57,7 +57,7 @@ export default function Login({ onLogin }) {
       <section className="register-card login-card" aria-labelledby="login-heading">
         <header className="register-header">
           <h1 id="login-heading">Login</h1>
-          <p>Use the demo account you registered in this tab.</p>
+          <p>Use the email and password you registered with.</p>
         </header>
 
         <form noValidate onSubmit={handleSubmit} onChange={clearFeedback}>

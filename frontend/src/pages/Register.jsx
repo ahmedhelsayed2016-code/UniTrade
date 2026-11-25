@@ -101,7 +101,7 @@ export default function Register({ onRegister, loginUrl }) {
             <path d="m2 12 14-7 14 7-14 7z M7 15v6c5 6 13 6 18 0v-6 M29 13v7" />
           </svg>
           <h1 id="register-heading">Create Account</h1>
-          <p>Demo account for this tab. Use test details.</p>
+          <p>Create an account to sign in and view your profile.</p>
         </header>
 
         <form onSubmit={handleSubmit}>
@@ -114,7 +114,7 @@ export default function Register({ onRegister, loginUrl }) {
                 <input {...inputProps('lastName')} autoComplete="family-name" placeholder="Last name" pattern={'.*\\S.*'} />
               </Field>
             </div>
-            <Field name="photo" label="Profile photo (optional)">
+            <Field name="photo" label="Profile photo (optional, this tab only)">
               <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp"
                 onChange={handlePhotoChange} />
             </Field>
