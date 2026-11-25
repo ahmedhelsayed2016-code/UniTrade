@@ -6,10 +6,10 @@ import { fileURLToPath } from "node:url";
 import connectDB from "./config/db.js";
 import Student from "./models/Student.js";
 import authRoutes from "./routes/authRoutes.js";
+import { localMailEnabled, outboxPath } from "./config/mail.js";
 
 const app = express();
 
-app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
     origin: process.env.FRONTEND_ORIGIN || "http://localhost:5173",
@@ -29,6 +29,8 @@ await connectDB();
 await Student.init();
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => {
+// Keep the local mail outbox on the loopback interface.
+app.listen(port, localMailEnabled() ? "127.0.0.1" : undefined, () => {
     console.log(`Server listening on http://localhost:${port}`);
+    if (localMailEnabled()) console.log(`Development email outbox: ${outboxPath()}`);
 });

@@ -1,155 +1,226 @@
-#root:has(.register-page) {
-  width: 100%;
-  border: 0;
-}
-
 .register-page {
-  --page-bg: #C6B39D;
-  --card-bg: #DBCCB9;
-  --input-bg: #E8DDCF;
-  --text: #382E27;
-  --muted-text: #5F5145;
-  --field-border: #81705E;
-  --button: #725039;
-  --error: #942F35;
+  --account-gutter: clamp(20px, 5vw, 44px);
+  --account-top: clamp(21px, 4vw, 30px);
+  --account-banner:
+    radial-gradient(ellipse at top right, rgb(184 154 99 / 19%), transparent 62%),
+    linear-gradient(120deg, var(--espresso), var(--walnut));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  justify-items: center;
   min-height: 100svh;
-  padding: 8px clamp(12px, 2.4vw, 36px) 24px;
-  background: var(--page-bg);
-  color: var(--text);
-  color-scheme: light;
-  font: 1rem/1.45 'Segoe UI', Arial, sans-serif;
-  letter-spacing: normal;
-}
-
-.register-page, .register-page * {
-  box-sizing: border-box;
+  padding: clamp(18px, 5vw, 64px) clamp(12px, 4vw, 42px);
+  background:
+    radial-gradient(ellipse at 16% 8%, rgb(184 154 99 / 24%), transparent 36rem),
+    radial-gradient(ellipse at 90% 92%, rgb(115 124 101 / 13%), transparent 34rem),
+    linear-gradient(155deg, var(--surface), var(--ivory) 53%);
 }
 
 .register-card {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: clamp(24px, 3vw, 44px) clamp(16px, 2vw, 30px) 24px;
-  border: 1px solid #AB957D;
-  border-radius: 26px;
-  background: var(--card-bg);
+  width: min(100%, 48rem);
+  min-width: 0;
+  padding: var(--account-top) var(--account-gutter) clamp(19px, 3.5vw, 26px);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
 }
 
 .register-header {
-  margin-bottom: 32px;
-  text-align: center;
+  margin: calc(-1 * var(--account-top)) calc(-1 * var(--account-gutter)) clamp(22px, 4vw, 32px);
+  padding: clamp(22px, 3.6vw, 32px) var(--account-gutter);
+  border-block-end: 2px solid var(--gold);
+  background: var(--account-banner);
+  color: var(--ivory);
 }
 
 .register-header h1 {
-  margin: 8px 0 4px;
-  color: var(--text);
-  font: 650 clamp(26px, 2.5vw, 34px)/1.25 'Segoe UI', Arial, sans-serif;
-  letter-spacing: normal;
+  font-size: clamp(2.06rem, 5vw, 3rem);
+  font-weight: 400;
+  line-height: 1.07;
+  letter-spacing: -.035em;
+  overflow-wrap: anywhere;
 }
 
-.register-header p, .register-field label {
-  color: var(--muted-text);
+.register-header p {
+  margin-block-start: 8px;
+  color: var(--sand);
+  font-size: .94rem;
+  overflow-wrap: anywhere;
 }
+
+.account-brand {
+  --brand-size: 42px;
+  min-height: 44px;
+  margin-block-end: 15px;
+  color: var(--ivory);
+}
+
+.account-brand:hover { color: var(--sand); }
+.account-brand:focus-visible { outline-color: var(--gold); }
 
 .register-fields {
   display: grid;
-  gap: 20px;
+  gap: 17px;
   min-width: 0;
   margin: 0;
   padding: 0;
   border: 0;
 }
 
+.signup-page .register-fields,
 .register-names {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  gap: 17px clamp(13px, 3vw, 24px);
 }
 
-.register-names > :first-child {
-  grid-column: 2;
-  grid-row: 1;
+.signup-page .register-fields > :is(.register-names, .register-submit, .photo-field) {
+  grid-column: 1 / -1;
 }
 
 .register-field {
   display: grid;
+  align-content: start;
   min-width: 0;
   gap: 6px;
-  text-align: right;
+  color: var(--ink);
+  font-size: .9rem;
+  font-weight: 650;
+  text-align: start;
+  overflow-wrap: anywhere;
 }
 
-.register-field label {
-  font-weight: 600;
-}
-
-.register-field input, .register-field select, .register-submit {
+.register-field :is(input, select),
+.register-submit {
   width: 100%;
   min-width: 0;
-  min-height: clamp(48px, 5vw, 66px);
-  padding: 10px clamp(16px, 2vw, 28px);
+  min-height: 52px;
+  padding: 10px 13px;
   border: 1px solid var(--field-border);
-  border-radius: 40px;
-  background: var(--input-bg);
-  color: var(--text);
-  font: inherit;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  transition: background-color var(--ease), border-color var(--ease), box-shadow var(--ease);
 }
 
-.register-field input {
-  text-align: right;
+.register-field :is(input, select) {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 400;
+  text-align: start;
 }
 
-.register-field input::placeholder, .register-field select:invalid {
-  color: var(--muted-text);
+.register-field :is(input, select):enabled:hover {
+  border-color: var(--brown);
 }
 
-.register-page :is(input, select, button, a):focus-visible {
-  outline: 2px solid var(--button);
-  outline-offset: 3px;
+.register-field :is(input, select):focus {
+  border-color: var(--brown);
+  box-shadow: 0 0 0 3px rgb(184 154 99 / 22%);
 }
 
-.register-field input:user-invalid, .register-field select:user-invalid,
+.register-field input::placeholder,
+.register-field select:invalid {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.photo-upload {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 6px 10px;
+  border: 1px dashed var(--field-border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  transition: background-color var(--ease), border-color var(--ease);
+}
+
+.photo-upload-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--ivory);
+  color: var(--walnut);
+}
+
+.photo-upload-name {
+  color: var(--muted);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.photo-upload input[type='file'] {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.photo-upload:focus-within { outline: 2px solid var(--focus); outline-offset: 3px; }
+.photo-upload:has(input:enabled:hover) { border-color: var(--brown); background: var(--ivory); }
+.photo-upload:has(input:user-invalid) { border-color: var(--burgundy); }
+
+.register-field :is(input, select):user-invalid,
 .register-field input[aria-invalid="true"] {
-  border-color: var(--error);
+  border-color: var(--burgundy);
 }
 
 .password-error {
-  margin: 0;
-  color: var(--error);
+  color: var(--burgundy);
 }
 
-.register-password, .register-date {
+.register-password,
+.register-date {
   position: relative;
 }
 
 .register-password input {
-  padding-left: 76px;
+  padding-inline-end: 68px;
 }
 
-.register-password button, .register-footer button {
+.register-password button,
+.register-footer button {
   border: 0;
   background: transparent;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
+  color: var(--brown);
+  font-weight: 650;
 }
 
 .register-password button {
   position: absolute;
-  inset: 2px auto 2px 12px;
-  padding: 0 10px;
-  color: var(--button);
+  inset-block: 4px;
+  inset-inline-end: 4px;
+  min-width: 55px;
+  padding-inline: 7px;
+  border-radius: 6px;
+  font-size: .875rem;
+  transition: background-color var(--ease);
 }
 
-.register-date input {
-  text-align: left;
+.register-password button:enabled:hover {
+  background: var(--ivory);
 }
 
 .register-date span {
   position: absolute;
-  top: 50%;
-  left: clamp(16px, 2vw, 28px);
+  inset-block-start: 50%;
+  inset-inline-start: 13px;
+  max-inline-size: calc(100% - 56px);
   transform: translateY(-50%);
-  background: var(--input-bg);
-  color: var(--muted-text);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 400;
   pointer-events: none;
 }
 
@@ -157,56 +228,98 @@
   display: none;
 }
 
+.register-field small,
+.register-field .password-error {
+  font-size: .84rem;
+  font-weight: 500;
+}
+
 .register-field small {
-  color: var(--muted-text);
+  color: var(--muted);
 }
 
 .register-submit {
-  background: var(--button);
-  color: #FFF3E4;
-  font-weight: 650;
-  cursor: pointer;
+  border-color: var(--walnut);
+  background: var(--walnut);
+  color: var(--ivory);
+  font-weight: 700;
 }
 
-.register-submit:hover {
-  background: #60412E;
+.signup-page .register-submit {
+  margin-block-start: 4px;
+}
+
+.register-submit:enabled:hover {
+  border-color: var(--espresso);
+  background: var(--espresso);
+  box-shadow: var(--shadow-sm);
 }
 
 .register-submit:disabled {
+  opacity: .72;
   cursor: wait;
 }
 
 .register-status:not(:empty) {
-  margin: 16px 0 0;
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--ivory);
+  font-size: .9rem;
   text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.register-status:is(.password-error, .login-error):not(:empty) {
+  background: color-mix(in srgb, var(--burgundy) 8%, var(--surface));
 }
 
 .register-footer {
-  padding: 20px 0 24px;
-  border-bottom: 1px solid #AB957D;
+  margin-block-start: 22px;
+  padding-block-start: 17px;
+  border-block-start: 1px solid var(--line);
+  color: var(--muted);
+  font-size: .9rem;
   text-align: center;
 }
 
 .register-footer :is(button, a) {
-  padding: 0;
-  color: inherit;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding-inline: 5px;
+  color: var(--brown);
   font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
-@media (max-width: 600px) {
-  .register-card { border-radius: 20px; }
-  .register-names { grid-template-columns: 1fr; gap: 20px; }
-  .register-names > :first-child { grid-column: auto; }
-}
-.signup-page.register-page {
-  display: grid;
-  place-items: center;
-  padding: clamp(20px, 5vw, 72px) clamp(12px, 4vw, 56px);
+.register-footer :is(button:enabled, a):hover {
+  color: var(--espresso);
 }
 
-.signup-page > .register-card {
-  width: min(100%, 920px);
-  min-width: 0;
-  padding: clamp(22px, 4vw, 52px) clamp(16px, 5vw, 64px);
-  box-shadow: 0 12px 36px rgb(69 46 27 / 14%);
+@media (max-width: 640px) {
+  .register-page {
+    --account-gutter: clamp(14px, 4vw, 24px);
+    padding-block: 16px 28px;
+  }
+
+  .register-header {
+    padding-block: 22px;
+  }
+
+  .register-header h1 {
+    font-size: clamp(1.8rem, 7vw, 2.4rem);
+  }
+
+  .signup-page .register-fields,
+  .register-names {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .register-footer {
+    margin-block-start: 16px;
+    padding-block-start: 10px;
+  }
 }

@@ -17,14 +17,26 @@ const studentSchema = new mongoose.Schema({
         }
     },
     major: { type: String, required: true, trim: true },
-    gender: { type: String, required: true, trim: true }
+    gender: { type: String, required: true, trim: true },
+    photoType: String,
+    photo: { type: Buffer, select: false },
+    passwordReset: { type: tokenSchema(), select: false },
+    sessionVersion: { type: Number, default: 0 }
 }, { timestamps: true });
+
+function tokenSchema() {
+    return new mongoose.Schema({ digest: String, expiresAt: Date }, { _id: false });
+}
 
 studentSchema.pre("save", async function () {
     if (this.isModified("password")) {
-        this.password = await bcrypt.hash(this.password, 12);
+        this.password = await this.constructor.hashPassword(this.password);
     }
 });
+
+studentSchema.statics.hashPassword = function (password) {
+    return bcrypt.hash(password, 12);
+};
 
 studentSchema.methods.matchPassword = function (password) {
     return bcrypt.compare(password, this.password);

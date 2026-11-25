@@ -12,3 +12,6 @@ build/
 
 # Logs
 *.log
+
+# Local email and test output
+.mail-outbox/

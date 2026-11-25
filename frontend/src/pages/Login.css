@@ -1,31 +1,39 @@
 .login-page {
-  display: grid;
-  place-items: center;
+  align-items: center;
 }
 
 .login-card {
-  width: min(100%, 32rem);
+  width: min(100%, 29rem);
 }
 
-.login-page .register-field input:user-invalid {
+.login-page .register-field input:user-invalid:not([aria-invalid="true"]) {
   border-color: var(--field-border);
 }
 
 .login-error {
-  color: var(--error);
-}
-
-.login-page .register-field input[aria-invalid="true"] {
-  border-color: var(--error);
+  color: var(--burgundy);
 }
 
 .login-forgot {
+  display: inline-flex;
   justify-self: end;
-  padding: 4px 0;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  text-decoration: underline;
-  cursor: pointer;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 5px;
+  color: var(--brown);
+  font-size: .875rem;
+  font-weight: 650;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color var(--ease);
+}
+
+.login-forgot:hover {
+  color: var(--espresso);
+}
+
+@media (max-width: 640px) {
+  .login-page {
+    align-items: start;
+  }
 }

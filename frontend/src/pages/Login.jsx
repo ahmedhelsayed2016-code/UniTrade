@@ -1,16 +1,19 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import Brand from '../components/Brand.jsx'
+import { apiMessage } from '../services/authForm.js'
 import './Register.css'
 import './Login.css'
 
-const invalidCredentials = 'invalid email or password'
+const invalidCredentials = 'Check your email and password, then try again.'
 
 export default function Login({ onLogin }) {
-  const [email, setEmail] = useState('')
+  const { state } = useLocation()
+  const [email, setEmail] = useState(state?.email ?? '')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState(state?.message ?? '')
   const [error, setError] = useState('')
   const hasInvalidCredentials = error === invalidCredentials
 
@@ -24,29 +27,17 @@ export default function Login({ onLogin }) {
     if (isSubmitting) return
 
     clearFeedback()
-    if (!event.currentTarget.checkValidity()) {
+    if (!event.currentTarget.checkValidity() || new TextEncoder().encode(password).length > 72) {
       setError(invalidCredentials)
-      return
-    }
-
-    if (!onLogin) {
-      setMessage('Sign-in will be available when the server is connected.')
       return
     }
 
     setIsSubmitting(true)
     try {
-      const result = await onLogin({ email: email.trim(), password })
-      if (result === false) {
-        setError(invalidCredentials)
-        return
-      }
-      setPassword('')
-      setShowPassword(false)
-      setMessage('You are signed in.')
+      await onLogin({ email: email.trim(), password })
     } catch (failure) {
       const status = failure?.response?.status ?? failure?.status
-      setError(status === 401 ? invalidCredentials : 'Sign-in is unavailable. Please try again.')
+      setError(status === 401 ? invalidCredentials : apiMessage(failure, 'Sign-in is unavailable. Please try again.'))
     } finally {
       setIsSubmitting(false)
     }
@@ -56,6 +47,7 @@ export default function Login({ onLogin }) {
     <main className="register-page login-page">
       <section className="register-card login-card" aria-labelledby="login-heading">
         <header className="register-header">
+          <Brand className="account-brand" />
           <h1 id="login-heading">Login</h1>
           <p>Use the email and password you registered with.</p>
         </header>
@@ -68,6 +60,7 @@ export default function Login({ onLogin }) {
                 id="login-email"
                 name="email"
                 type="email"
+                maxLength={254}
                 autoComplete="username"
                 placeholder="example@email.com"
                 value={email}
@@ -103,16 +96,7 @@ export default function Login({ onLogin }) {
                   {showPassword ? 'Hide' : 'Show'}
                 </button>
               </div>
-              <button
-                type="button"
-                className="login-forgot"
-                onClick={() => {
-                  setError('')
-                  setMessage('Password reset is not available yet.')
-                }}
-              >
-                Forgot password?
-              </button>
+              <Link className="login-forgot" to="/forgot-password" state={{ email }}>Forgot password?</Link>
             </div>
 
             <button className="register-submit" type="submit">
